@@ -3,6 +3,8 @@
 # General information
 UE4 Editor plugin that provides a convinient way for importing data from google spreadsheet into UE4 data table.
 
+![Alt Text](Resources/demo.gif)
+
 # How to install
 * Download the release:
 https://github.com/riperjack/ue4_googledoc2datatable/releases/download/1.0/GoogleDoc2DataTable.zip
