@@ -2,32 +2,32 @@
 
 const FString UGoogleDocsApi::ApiBaseUrl = "https://docs.google.com/spreadsheets/d/";
 
-TSharedRef<IHttpRequest> UGoogleDocsApi::RequestWithRoute(FString Subroute) 
+TSharedRef<IHttpRequest,ESPMode::ThreadSafe> UGoogleDocsApi::RequestWithRoute(FString Subroute) 
 {
 	Http = &FHttpModule::Get();
-	TSharedRef<IHttpRequest> Request = Http->CreateRequest();
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> Request = Http->CreateRequest();
 	Request->SetURL(UGoogleDocsApi::ApiBaseUrl + Subroute);
 	SetRequestHeaders(Request);
 	return Request;
 }
 
-void UGoogleDocsApi::SetRequestHeaders(TSharedRef<IHttpRequest>& Request) 
+void UGoogleDocsApi::SetRequestHeaders(TSharedRef<IHttpRequest,ESPMode::ThreadSafe>& Request) 
 {
 	Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
 	Request->SetHeader(TEXT("Content-Type"), TEXT("text/csv"));
 	Request->SetHeader(TEXT("Accepts"), TEXT("text/csv"));
 }
 
-TSharedRef<IHttpRequest> UGoogleDocsApi::GetRequest(FString Subroute) 
+TSharedRef<IHttpRequest,ESPMode::ThreadSafe> UGoogleDocsApi::GetRequest(FString Subroute) 
 {
-	TSharedRef<IHttpRequest> Request = RequestWithRoute(Subroute);
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> Request = RequestWithRoute(Subroute);
 	Request->SetVerb("GET");
 	return Request;
 }
 
-TSharedRef<IHttpRequest> UGoogleDocsApi::PostRequest(FString Subroute, FString ContentJsonString) 
+TSharedRef<IHttpRequest,ESPMode::ThreadSafe> UGoogleDocsApi::PostRequest(FString Subroute, FString ContentJsonString) 
 {
-	TSharedRef<IHttpRequest> Request = RequestWithRoute(Subroute);
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> Request = RequestWithRoute(Subroute);
 	Request->SetVerb("POST");
 	Request->SetContentAsString(ContentJsonString);
 	return Request;
@@ -52,7 +52,7 @@ void UGoogleDocsApi::ProcessResponse(FHttpRequestPtr Request, FHttpResponsePtr R
 
 void UGoogleDocsApi::SendRequest(FString docId) 
 {
-	TSharedRef<IHttpRequest> Request = GetRequest(FString::Printf(TEXT("%s/export?format=csv"), *docId));
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> Request = GetRequest(FString::Printf(TEXT("%s/export?format=csv"), *docId));
 	Request->OnProcessRequestComplete().BindUObject(this, &UGoogleDocsApi::ProcessResponse);
 	Request->ProcessRequest();
 }

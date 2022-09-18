@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Runtime/Online/HTTP/Public/Http.h"
+#include "Http.h"
 #include "GoogleDocsApi.generated.h"
 
 DECLARE_DELEGATE_OneParam(OnResponse, FString);
@@ -22,10 +22,10 @@ private:
 	FHttpModule* Http;
 
 	void ProcessResponse(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
-	void SetRequestHeaders(TSharedRef<IHttpRequest>& Request);
+	void SetRequestHeaders(TSharedRef<IHttpRequest,ESPMode::ThreadSafe>& Request);
 	bool ResponseIsValid(FHttpResponsePtr Response, bool bWasSuccessful);
 
-	TSharedRef<IHttpRequest> GetRequest(FString Subroute);
-	TSharedRef<IHttpRequest> PostRequest(FString Subroute, FString ContentJsonString);
-	TSharedRef<IHttpRequest> RequestWithRoute(FString Subroute);
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> GetRequest(FString Subroute);
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> PostRequest(FString Subroute, FString ContentJsonString);
+	TSharedRef<IHttpRequest,ESPMode::ThreadSafe> RequestWithRoute(FString Subroute);
 };
